@@ -198,7 +198,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
 }
 .foot{color:var(--faint);font-size:.85em;text-align:center;margin-top:28px}
 </style>
-</head>
+<style>.search-ico{position:absolute;left:29px;top:22px;transform:translateY(-50%);font-size:15px;pointer-events:none;z-index:2}.searchbar input{padding-left:40px}</style></head>
 <body data-lang="zh">
 <header class="toolbar">
   <div class="toolbar-in">
@@ -224,8 +224,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
     </div>
   </div>
   <div class="searchbar">
-    <input id="searchInput" type="search" autocomplete="off"
-      placeholder="搜索全站（中英文，可多词）… / Search all pages…">
+    <span class="search-ico" aria-hidden="true">🔍</span><input id="searchInput" type="search" autocomplete="off">
     <div class="search-results" id="searchResults" role="listbox"></div>
   </div>
   <nav class="pagenav" id="pageNav" aria-label="Pages"></nav>
