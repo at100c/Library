@@ -14,6 +14,12 @@
     font-display:swap;
     unicode-range:U+3000-303F,U+3400-4DBF,U+4E00-9FFF,U+FF00-FFEF;
   }
+  @font-face{
+    font-family:"FFFTusj";
+    src:url("fonts/fff-tusj.woff2") format("woff2");
+    font-display:swap;
+    unicode-range:U+0000-00FF;
+  }
   :root{
     --bg:#F4EEE1;
     --bg-deep:#EFE7D5;
@@ -67,7 +73,7 @@
   /* ---------- title ---------- */
   header{text-align:center;margin:34px 0 8px}
   header h1{
-    font-family:"QingNiaoGuYin","Long Cang","Ma Shan Zheng",sans-serif;
+    font-family:"QingNiaoGuYin","FFFTusj","Long Cang","Ma Shan Zheng",sans-serif;
     font-size:clamp(44px,7.5vw,64px);
     font-weight:400;
     letter-spacing:.03em;
