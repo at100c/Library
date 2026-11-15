@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>书架 · Bookshelf</title>
+<style>
+  :root{
+    --bg:#FCFCFA;
+    --panel:#FFFFFF;
+    --ink:#2E2B25;
+    --muted:#6E675C;
+    --shadow:14px 16px 34px rgba(150,142,122,.30), -10px -10px 24px rgba(255,255,255,.9);
+    --shadow-hover:18px 22px 44px rgba(150,142,122,.38), -10px -10px 24px rgba(255,255,255,.9);
+    --sel:#F6E189;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:48px 20px 40px;
+  }
+  header{text-align:center;margin-bottom:40px}
+  header h1{font-size:30px;font-weight:700;letter-spacing:.04em}
+  header p{color:var(--muted);font-size:14px;margin-top:8px}
+  main{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(230px,280px));
+    gap:36px;
+    justify-content:center;
+    width:100%;max-width:1080px;
+  }
+  a.book{
+    display:block;text-decoration:none;color:var(--ink);
+    background:var(--panel);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:18px 18px 20px;
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  a.book:hover,a.book:focus-visible{box-shadow:var(--shadow-hover);transform:translateY(-3px)}
+  a.book:active{transform:translateY(0)}
+  a.book img{
+    display:block;width:100%;height:auto;
+    border-radius:10px;
+  }
+  .title{font-size:18px;font-weight:700;line-height:1.35;margin-top:16px}
+  .subtitle{font-size:14px;color:var(--ink);margin-top:5px}
+  .meta{font-size:13px;color:var(--muted);margin-top:5px}
+  .enter{
+    display:inline-block;margin-top:14px;
+    background:var(--sel);color:#4A3803;
+    font-size:14px;font-weight:600;
+    padding:9px 18px;border-radius:999px;
+  }
+  footer{margin-top:52px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7}
+</style>
+</head>
+<body>
+  <header>
+    <h1>书架</h1>
+    <p>把读过的书做成可以随手查的网页 · 点击封面进入</p>
+  </header>
+  <main>
+    <a class="book" href="child-care/" aria-label="进入 Child Care Design Guidelines 交互版">
+      <img src="cover.jpg" alt="Child Care Design Guidelines 原书封面">
+      <div class="title">Child Care Design Guidelines</div>
+      <div class="subtitle">Richmond 托儿所设计指引 · 交互版</div>
+      <div class="meta">City of Richmond · December 2019</div>
+      <span class="enter">打开这本书 →</span>
+    </a>
+  </main>
+  <footer>
+    本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。<br>
+    Interactive notes based on a public document by the City of Richmond.
+  </footer>
+</body>
+</html>
