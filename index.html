@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>图书馆 · Library</title>
+<title>图书馆 · LIBRARY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F4EEE1;
@@ -72,12 +75,25 @@
   }
   .langbar button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink)}
 
-  header{text-align:center;margin:26px 0 6px}
-  header h1{font-size:30px;font-weight:700;letter-spacing:.04em}
-  header p{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.6}
+  header{text-align:center;margin:30px 0 10px}
+  header h1{
+    font-family:"Cinzel","Noto Serif SC","Songti SC","STSong","SimSun",serif;
+    font-size:clamp(38px,6.5vw,56px);
+    font-weight:900;
+    letter-spacing:.14em;
+    color:#6E5626;
+    text-shadow:
+      0 1px 0 #FFFDF4,
+      0 2px 0 #D9C491,
+      0 3px 0 #BFA76A,
+      0 5px 0 #A68D4F,
+      0 8px 10px rgba(101,84,50,.45),
+      0 16px 28px rgba(101,84,50,.30);
+  }
+  header h1 .bi-zh{font-size:.62em;letter-spacing:.3em;opacity:1}
 
   /* ---------- shelves ---------- */
-  .shelf-block{margin-top:34px}
+  .shelf-block{margin-top:46px}
   .shelf-head{
     display:flex;align-items:baseline;justify-content:space-between;
     padding:0 6px;margin-bottom:14px;
@@ -95,12 +111,22 @@
   a.book-standing:hover,a.book-standing:focus-visible{transform:translateY(-6px)}
   a.book-standing img{
     display:block;height:178px;width:auto;border-radius:3px 6px 6px 3px;
-    box-shadow:6px 8px 16px rgba(94,78,48,.35), inset 2px 0 3px rgba(255,255,255,.35);
+    box-shadow:12px 16px 26px rgba(94,78,48,.48), 4px 5px 9px rgba(94,78,48,.32);
   }
   .plank{
-    height:17px;margin-top:-2px;border-radius:3px;
-    background:linear-gradient(180deg,var(--plank-top) 0%,var(--plank-face) 55%,#D3BF96 100%);
-    box-shadow:0 22px 22px -10px rgba(120,100,60,.45), 0 3px 5px rgba(120,100,60,.25);
+    position:relative;
+    height:24px;margin-top:-2px;border-radius:3px;
+    background:linear-gradient(180deg,#F7EFDA 0%,var(--plank-top) 22%,var(--plank-face) 60%,#C9B183 100%);
+    box-shadow:
+      inset 0 2px 2px rgba(255,255,255,.85),
+      inset 0 -3px 5px rgba(120,98,55,.45),
+      0 4px 6px rgba(120,100,60,.35);
+  }
+  .plank::after{
+    content:"";position:absolute;left:1.5%;right:1.5%;top:100%;height:40px;
+    background:linear-gradient(180deg, rgba(101,84,50,.42) 0%, rgba(101,84,50,.16) 55%, rgba(101,84,50,0) 100%);
+    filter:blur(3px);
+    pointer-events:none;
   }
   .noresult{
     display:none;text-align:center;color:var(--muted);
@@ -186,14 +212,14 @@
     {id:"finished", name:{en:"Finished",          zh:"已读完"}}
   ];
   var STR = {
-    h1:{en:"Library", zh:"图书馆"},
+    h1:{en:"LIBRARY", zh:"图书馆 · LIBRARY"},
     v_shelves:{en:"Shelves", zh:"书架"},
     v_all:{en:"All Books", zh:"全部图书"},
     search_ph:{en:"Search in My library", zh:"在我的图书馆里搜索"},
     open:{en:"Open this book →", zh:"打开这本书 →"},
     noresult:{en:"No book matches your search.", zh:"没有找到这本书。"}
   };
-  var TITLES = {en:"Library", bi:"图书馆 · Library", zh:"图书馆 · Library"};
+  var TITLES = {en:"LIBRARY", bi:"图书馆 · LIBRARY", zh:"图书馆 · LIBRARY"};
   var lang = "zh", query = "";
 
   function pick(s){
@@ -262,7 +288,13 @@
   function applyLang(l){
     lang = l;
     document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var s = STR[el.getAttribute("data-i18n")]; if(s) setBi(el, s);
+      var key = el.getAttribute("data-i18n"); var s = STR[key]; if(!s) return;
+      if(key === "h1" && lang === "bi"){
+        el.innerHTML = "";
+        var a = document.createElement("span"); a.className = "bi"; a.textContent = "LIBRARY";
+        var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = "图书馆";
+        el.appendChild(a); el.appendChild(b);
+      } else { setBi(el, s); }
     });
     var q = document.getElementById("q");
     q.placeholder = pick(STR.search_ph).split("\n")[0];
