@@ -245,6 +245,33 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
 .chap-nav a{font-size:calc(13px * var(--font-scale))}
 .calc-out{font-size:calc(19px * var(--font-scale))}
 #resumeBar{font-size:calc(16px * var(--font-scale))}
+/* 全站搜索：白色漂浮胶囊输入框 + 下拉结果，置于语言切换左侧 */
+.search-wrap{position:relative;flex:1 1 170px;min-width:140px;max-width:270px}
+.search-wrap input[type="search"]{width:100%;height:44px;min-height:44px;border-radius:999px;border:1px solid var(--glass-brd);background:var(--glass-bg);-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2);box-shadow:var(--glass-sh);padding:8px 38px 8px 37px;font-size:calc(16px * var(--font-scale));color:var(--ink)}
+.search-wrap input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.search-wrap input[type="search"]:focus{outline:2px solid var(--accent);outline-offset:1px}
+.search-ico{position:absolute;left:13px;top:22px;transform:translateY(-50%);color:var(--muted);pointer-events:none;z-index:1}
+#searchClear{position:absolute;right:6px;top:22px;transform:translateY(-50%);width:32px;height:32px;min-width:32px;min-height:32px;padding:0;border:none;border-radius:999px;background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;font-size:19px;line-height:1;color:var(--muted);cursor:pointer;z-index:1}
+#searchClear:active{box-shadow:none}
+.search-results{position:absolute;top:calc(100% + 8px);right:0;width:min(360px,calc(100vw - 20px));max-height:min(62vh,440px);overflow:auto;background:var(--panel);border-radius:16px;box-shadow:var(--shadow);padding:6px;z-index:90;text-align:left}
+.search-results[hidden]{display:none}
+.search-results .sr-item{display:block;width:100%;min-width:0;min-height:0;text-align:left;border:none;border-radius:12px;background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:9px 10px;margin:0;color:var(--ink);cursor:pointer;font-size:calc(14px * var(--font-scale))}
+.search-results .sr-item:hover{background:var(--chip)}
+.search-results .sr-item.active{background:var(--sel-bg);color:var(--sel-ink);box-shadow:var(--sel-sh)}
+.sr-title{display:block;font-weight:700;font-size:calc(14px * var(--font-scale));line-height:1.4}
+.sr-meta{display:block;font-size:calc(12px * var(--font-scale));color:var(--data);font-weight:600;margin-top:1px}
+.sr-snip{display:block;font-size:calc(13px * var(--font-scale));color:var(--muted);line-height:1.5;margin-top:2px}
+.sr-item.active .sr-snip,.sr-item.active .sr-meta{color:inherit}
+.sr-snip mark{background:var(--accent);color:#2E2B25;border-radius:3px;padding:0 1px}
+.sr-none{padding:12px 10px;font-size:calc(14px * var(--font-scale));color:var(--muted);line-height:1.5}
+.sr-count{padding:6px 10px 2px;font-size:calc(12px * var(--font-scale));color:var(--muted)}
+.search-hit{outline:3px solid var(--accent)!important;outline-offset:3px}
+@media (max-width:640px){
+  .search-wrap{flex:1 1 150px;min-width:118px}
+  .search-wrap input[type="search"]{height:40px;min-height:40px}
+  .search-ico{top:20px}
+  #searchClear{top:20px}
+}
 </style>
 </head>
 <body>
@@ -259,6 +286,12 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
       <a href="#/tech" data-nav="tech"><span class="le" lang="en">Page 4 · Technical Standards</span><span class="lz">页 4 · 技术标准速查</span></a>
     </nav>
     <div class="tools">
+      <div class="search-wrap">
+        <svg class="search-ico" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" id="siteSearch" autocomplete="off" placeholder="搜索全站内容" aria-label="搜索全站内容 Search the whole site" role="combobox" aria-expanded="false" aria-controls="searchResults" aria-autocomplete="list">
+        <button type="button" id="searchClear" hidden aria-label="清空搜索 Clear search">×</button>
+        <div class="search-results" id="searchResults" hidden role="listbox" aria-label="搜索结果 Search results"></div>
+      </div>
       <div class="lang-switch" role="group" aria-label="Language 语言切换"><button type="button" data-lang-btn="en" aria-pressed="false">EN</button><button type="button" data-lang-btn="bi" aria-pressed="false">双语</button><button type="button" data-lang-btn="zh" aria-pressed="true">中文</button></div>
       <button type="button" id="fontMinus" aria-label="减小字号">A−</button>
       <button type="button" id="fontPlus" aria-label="增大字号">A+</button>
@@ -3152,6 +3185,197 @@ for (var li=0; li<langBtns.length; li++){
 applyLang(store.get("cc-lang") || "zh");
 showView(viewFromHash());
 checkResume();
+</script>
+<script>
+/* 全站搜索：索引全部视图的卡片 / 折叠层 / 章节条目 / 小节正文（中英文同入索引），下拉列命中，点结果跳页定位并高亮 */
+(function(){
+  var input = document.getElementById("siteSearch");
+  var box = document.getElementById("searchResults");
+  var clearBtn = document.getElementById("searchClear");
+  if (!input || !box) return;
+  var UNITS = null, lastQuery = "", currentBtns = [], activeIdx = -1, debounce = null;
+
+  function norm(s){ return (s || "").replace(/\s+/g, " ").trim(); }
+  function esc(s){ return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function curLang(){ return document.documentElement.getAttribute("data-lang") || "zh"; }
+  function langText(el){
+    if (!el) return "";
+    var l = curLang();
+    var ens = el.querySelectorAll(".le"), zhs = el.querySelectorAll(".lz");
+    function join(list){ var out = []; for (var i = 0; i < list.length; i++) out.push(norm(list[i].textContent)); return out.join(" "); }
+    var t = "";
+    if (l === "en") t = ens.length ? join(ens) : norm(el.textContent);
+    else if (l === "zh") t = zhs.length ? join(zhs) : norm(el.textContent);
+    else { var a = ens.length ? join(ens) : "", b = zhs.length ? join(zhs) : ""; t = (a && b) ? a + " · " + b : (a || b || norm(el.textContent)); }
+    return t.replace(/\[[A-Za-z]+\d+\]/g, "").replace(/\s+/g, " ").trim();
+  }
+  function pageName(v){
+    var t = (typeof TITLES !== "undefined") ? TITLES[v] : null;
+    if (!t) return v;
+    var l = curLang();
+    return l === "en" ? t.en : l === "bi" ? t.en + " · " + t.zh : t.zh;
+  }
+  function unitHead(el){
+    if (el.classList.contains("chap-item")) return el.querySelector(".chap-title");
+    if (el.tagName === "DETAILS") return el.querySelector("summary");
+    return el.querySelector("h3") || el.querySelector(".big") || el.querySelector("h2") || el.querySelector("h1");
+  }
+  function buildIndex(){
+    UNITS = [];
+    var views = document.querySelectorAll("[data-view]");
+    for (var vi = 0; vi < views.length; vi++){
+      var vname = views[vi].getAttribute("data-view");
+      var secs = views[vi].querySelectorAll("section");
+      for (var si = 0; si < secs.length; si++){
+        var sec = secs[si];
+        var secHead = sec.querySelector("h1, h2");
+        var found = sec.querySelectorAll(".card, details, .compare, li.chap-item");
+        var clone = sec.cloneNode(true);
+        var inner = clone.querySelectorAll(".card, details, .compare, li.chap-item, nav, figure");
+        for (var ci = inner.length - 1; ci >= 0; ci--) inner[ci].parentNode.removeChild(inner[ci]);
+        var ownText = norm(clone.textContent);
+        if (ownText.length > 40) UNITS.push({ view: vname, el: sec, headEl: secHead, secEl: sec, text: ownText, lower: ownText.toLowerCase(), own: true });
+        for (var ui = 0; ui < found.length; ui++){
+          var el = found[ui];
+          var t = norm(el.textContent);
+          if (t.length < 2) continue;
+          UNITS.push({ view: vname, el: el, headEl: unitHead(el), secEl: sec, text: t, lower: t.toLowerCase(), own: false });
+        }
+      }
+    }
+  }
+  function snippetHTML(hit, query){
+    var u = hit.u, text = u.text, idx = hit.idx;
+    var ql = query.toLowerCase(), qlen = query.length;
+    if (text.substr(idx, qlen).toLowerCase() !== ql){
+      var terms = ql.split(/\s+/);
+      for (var i = 0; i < terms.length; i++){ if (text.substr(idx, terms[i].length).toLowerCase() === terms[i]){ qlen = terms[i].length; break; } }
+    }
+    var start = Math.max(0, idx - 28), end = Math.min(text.length, idx + qlen + 46);
+    return (start > 0 ? "…" : "") + esc(text.slice(start, idx)) + "<mark>" + esc(text.slice(idx, idx + qlen)) + "</mark>" + esc(text.slice(idx + qlen, end)) + (end < text.length ? "…" : "");
+  }
+  function hideBox(){ box.hidden = true; box.innerHTML = ""; currentBtns = []; activeIdx = -1; input.setAttribute("aria-expanded", "false"); input.removeAttribute("aria-activedescendant"); }
+  function setActive(i){
+    activeIdx = i;
+    for (var k = 0; k < currentBtns.length; k++) currentBtns[k].classList.toggle("active", k === i);
+    if (i >= 0 && currentBtns[i]){ input.setAttribute("aria-activedescendant", currentBtns[i].id); currentBtns[i].scrollIntoView({ block: "nearest" }); }
+  }
+  function renderResults(query, hits){
+    box.innerHTML = ""; currentBtns = []; activeIdx = -1;
+    if (!hits.length){
+      var d = document.createElement("div");
+      d.className = "sr-none";
+      d.innerHTML = '<span class="le" lang="en">No results for &ldquo;' + esc(query) + '&rdquo;. Try another keyword.</span><span class="lz">没有找到与「' + esc(query) + '」相关的内容，换个关键词试试。</span>';
+      box.appendChild(d);
+      box.hidden = false; input.setAttribute("aria-expanded", "true");
+      return;
+    }
+    var MAX = 10;
+    var count = document.createElement("div");
+    count.className = "sr-count";
+    count.innerHTML = '<span class="le" lang="en">' + hits.length + (hits.length > 1 ? " results" : " result") + '</span><span class="lz">共 ' + hits.length + ' 条结果</span>';
+    box.appendChild(count);
+    for (var i = 0; i < Math.min(MAX, hits.length); i++){
+      (function(hit, idx){
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "sr-item"; b.id = "sr-item-" + idx; b.setAttribute("role", "option");
+        var title = langText(hit.u.headEl) || hit.u.text.slice(0, 34);
+        var meta = pageName(hit.u.view);
+        if (!hit.u.own){
+          var secT = langText(hit.u.secEl ? hit.u.secEl.querySelector("h1, h2") : null);
+          if (secT && secT !== title) meta += " · " + secT;
+        }
+        b.innerHTML = '<span class="sr-title">' + esc(title) + '</span><span class="sr-meta">' + esc(meta) + '</span><span class="sr-snip">' + snippetHTML(hit, query) + '</span>';
+        b.addEventListener("click", function(){ goTo(hit); });
+        b.addEventListener("mousemove", function(){ setActive(idx); });
+        box.appendChild(b);
+        currentBtns.push(b);
+      })(hits[i], i);
+    }
+    if (hits.length > MAX){
+      var more = document.createElement("div");
+      more.className = "sr-count";
+      more.innerHTML = '<span class="le" lang="en">Showing the first ' + MAX + ' — add more keywords to narrow it down.</span><span class="lz">仅显示前 ' + MAX + ' 条，再多打几个字可以缩小范围。</span>';
+      box.appendChild(more);
+    }
+    box.hidden = false; input.setAttribute("aria-expanded", "true");
+  }
+  function doSearch(q){
+    lastQuery = q;
+    var query = (q || "").trim();
+    clearBtn.hidden = !query;
+    if (!query){ hideBox(); return; }
+    if (!UNITS) buildIndex();
+    var ql = query.toLowerCase();
+    var hits = [];
+    for (var i = 0; i < UNITS.length; i++){
+      var u = UNITS[i], idx = u.lower.indexOf(ql);
+      if (idx < 0){
+        var terms = ql.split(/\s+/);
+        if (terms.length > 1){
+          var ok = true, first = -1;
+          for (var ti = 0; ti < terms.length; ti++){ var ix = u.lower.indexOf(terms[ti]); if (ix < 0){ ok = false; break; } if (first < 0 || ix < first) first = ix; }
+          if (ok) idx = first;
+        }
+      }
+      if (idx >= 0) hits.push({ u: u, idx: idx, titleHit: langText(u.headEl).toLowerCase().indexOf(ql) >= 0 });
+    }
+    hits.sort(function(a, b){ if (a.titleHit !== b.titleHit) return a.titleHit ? -1 : 1; return a.idx - b.idx; });
+    renderResults(query, hits);
+  }
+  function goTo(hit){
+    var u = hit.u, el = u.el;
+    hideBox();
+    if (typeof currentView !== "undefined" && currentView !== u.view){
+      try { location.hash = "#/" + u.view; } catch (e) {}
+      showView(u.view);
+    }
+    var chain = [], n = el;
+    while (n && n !== document.body){ chain.push(n); n = n.parentElement; }
+    for (var i = 0; i < chain.length; i++){
+      var node = chain[i];
+      if (node.tagName === "DETAILS" && !node.open) node.open = true;
+      if (node.classList && node.classList.contains("chap-panel") && node.hidden){
+        node.hidden = false;
+        var item = node.parentElement;
+        if (item){ item.classList.add("open"); var head = item.querySelector(".chap-head"); if (head) head.setAttribute("aria-expanded", "true"); }
+      } else if (node.hidden && !node.hasAttribute("data-view")) node.hidden = false;
+    }
+    var smooth = (typeof motionOK === "function") ? motionOK() : true;
+    setTimeout(function(){
+      el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "center" });
+      el.classList.add("search-hit");
+      setTimeout(function(){ el.classList.remove("search-hit"); }, 2600);
+    }, 60);
+  }
+  input.addEventListener("input", function(){
+    clearTimeout(debounce);
+    var v = input.value;
+    debounce = setTimeout(function(){ doSearch(v); }, 120);
+  });
+  input.addEventListener("focus", function(){ if (input.value.trim() && box.hidden) doSearch(input.value); });
+  input.addEventListener("keydown", function(e){
+    if (e.key === "Escape"){ e.preventDefault(); input.value = ""; lastQuery = ""; clearBtn.hidden = true; hideBox(); return; }
+    if (box.hidden) return;
+    if (e.key === "ArrowDown"){ e.preventDefault(); setActive(Math.min(activeIdx + 1, currentBtns.length - 1)); }
+    else if (e.key === "ArrowUp"){ e.preventDefault(); setActive(Math.max(activeIdx - 1, 0)); }
+    else if (e.key === "Enter"){ e.preventDefault(); var b = currentBtns[activeIdx >= 0 ? activeIdx : 0]; if (b) b.click(); }
+  });
+  clearBtn.addEventListener("click", function(){ input.value = ""; lastQuery = ""; clearBtn.hidden = true; hideBox(); input.focus(); });
+  document.addEventListener("mousedown", function(e){
+    var wrap = input.parentElement;
+    if (!box.hidden && wrap && !wrap.contains(e.target)) hideBox();
+  });
+  function syncLangUI(){
+    var l = curLang();
+    input.placeholder = l === "en" ? "Search the whole site" : l === "bi" ? "Search · 搜索全站内容" : "搜索全站内容";
+    if (!box.hidden && lastQuery) doSearch(lastQuery);
+  }
+  if (window.MutationObserver) new MutationObserver(function(muts){
+    for (var i = 0; i < muts.length; i++) if (muts[i].attributeName === "data-lang") syncLangUI();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-lang"] });
+  syncLangUI();
+})();
 </script>
 </body>
 </html>

@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <style>
+  @font-face{
+    font-family:"QingNiaoGuYin";
+    src:url("fonts/qingniao-guyin.woff2") format("woff2");
+    font-display:swap;
+    unicode-range:U+3000-303F,U+3400-4DBF,U+4E00-9FFF,U+FF00-FFEF;
+  }
   :root{
     --bg:#F4EEE1;
     --bg-deep:#EFE7D5;
@@ -39,9 +45,11 @@
   }
   .search span{color:var(--muted);font-size:14px}
   .search input{
-    border:none;background:transparent;outline:none;font:inherit;
+    border:none;background:transparent;outline:none;
+    font-family:"QingNiaoGuYin","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
     font-size:13.5px;color:var(--ink);width:100%;
   }
+  .bsub,.noresult{font-family:"QingNiaoGuYin","Long Cang","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
   .search input::placeholder{color:var(--muted)}
   .langbar{
     margin-left:auto;
@@ -49,7 +57,8 @@
     border-radius:999px;box-shadow:var(--shadow);padding:5px;
   }
   .langbar button{
-    border:none;background:transparent;cursor:pointer;font:inherit;
+    border:none;background:transparent;cursor:pointer;
+    font-family:"QingNiaoGuYin","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
     font-size:13.5px;font-weight:600;color:var(--muted);
     padding:7px 14px;border-radius:999px;
   }
@@ -58,7 +67,7 @@
   /* ---------- title ---------- */
   header{text-align:center;margin:34px 0 8px}
   header h1{
-    font-family:"Long Cang","Ma Shan Zheng",sans-serif;
+    font-family:"QingNiaoGuYin","Long Cang","Ma Shan Zheng",sans-serif;
     font-size:clamp(44px,7.5vw,64px);
     font-weight:400;
     letter-spacing:.03em;
