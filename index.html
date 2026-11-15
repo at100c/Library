@@ -161,14 +161,11 @@
 
   <header>
     <h1 data-i18n="h1">图书馆</h1>
-    <p data-i18n="tagline">把读过的书做成可以随手查的网页 · 点击封面进入</p>
   </header>
 
   <div class="shelves" id="shelves"></div>
   <div class="grid" id="grid"></div>
   <p class="noresult" id="noresult" data-i18n="noresult">没有找到这本书。</p>
-
-  <footer data-i18n="foot">本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。</footer>
 </div>
 
 <script>
@@ -190,15 +187,11 @@
   ];
   var STR = {
     h1:{en:"Library", zh:"图书馆"},
-    tagline:{en:"Books I have read, turned into pages I can look up anytime · click a cover to open it",
-             zh:"把读过的书做成可以随手查的网页 · 点击封面进入"},
     v_shelves:{en:"Shelves", zh:"书架"},
     v_all:{en:"All Books", zh:"全部图书"},
     search_ph:{en:"Search in My library", zh:"在我的图书馆里搜索"},
     open:{en:"Open this book →", zh:"打开这本书 →"},
-    noresult:{en:"No book matches your search.", zh:"没有找到这本书。"},
-    foot:{en:"Personal study notes, based on a public document published by the City of Richmond.",
-          zh:"本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。"}
+    noresult:{en:"No book matches your search.", zh:"没有找到这本书。"}
   };
   var TITLES = {en:"Library", bi:"图书馆 · Library", zh:"图书馆 · Library"};
   var lang = "zh", query = "";
