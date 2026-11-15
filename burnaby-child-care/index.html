@@ -10,14 +10,14 @@
 :root{
   --bg:#F7F4EE; --card:#F7F4EE; --ink:#28251E; --muted:#6E685B; --faint:#9A9484;
   --brick:#9C2F1F; --accent:#FFCC00; --sel:#F6E189; --selink:#2A2517;
-  --line:#EAE6D9; --chip:#F4F1E7; --fnbg:#F9ECE7;
+  --line:#EAE6D9; --chip:#F4F1E7;--btn-sh:4px 5px 12px rgba(110,100,74,.22), -3px -3px 9px rgba(255,255,255,.9), inset 1px 1px 0 rgba(255,255,255,.9); --fnbg:#F9ECE7;
   --shadow:inset 1px 1px 0 rgba(255,255,255,.95), inset 3px 3px 8px rgba(255,255,255,.35), 12px 14px 30px rgba(110,100,74,.34), -8px -8px 20px rgba(255,255,255,.9);
   --shadow-sm:inset 1px 1px 0 rgba(255,255,255,.95), inset 3px 3px 8px rgba(255,255,255,.35), 7px 9px 20px rgba(110,100,74,.29), -5px -5px 14px rgba(255,255,255,.9);
   --radius:18px;
 }
 html[data-theme="dark"]{
   --bg:#161613; --card:#23231F; --ink:#EDEAE0; --muted:#ABA496; --faint:#7E7869;
-  --brick:#E88A76; --line:#3A382E; --chip:#2C2C26; --fnbg:#3A2620;
+  --brick:#E88A76; --line:#3A382E; --chip:#2C2C26;--btn-sh:4px 5px 12px rgba(0,0,0,.45), inset 1px 1px 0 rgba(255,255,255,.14); --fnbg:#3A2620;
   --shadow:0 12px 32px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.35);
   --shadow-sm:0 6px 18px rgba(0,0,0,.4);
 }
@@ -165,7 +165,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
 /* guess-first */
 .guess .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .guess .opt{background:var(--chip);border:2px solid transparent;color:var(--ink);
-  border-radius:12px;padding:8px 16px;cursor:pointer;font-weight:600}
+  border-radius:12px;padding:8px 16px;cursor:pointer;font-weight:600;box-shadow:var(--btn-sh)}
 .guess .opt.right{background:var(--sel);color:var(--selink);border-color:var(--accent)}
 .guess .opt.wrong{opacity:.45;text-decoration:line-through}
 .guess .opt.wrong::before{content:"✗ ";color:#C62F24;font-weight:900}
@@ -177,7 +177,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
 .quiz-q .qq{font-weight:700;margin-bottom:8px}
 .quiz-q .opts{display:grid;gap:8px}
 .quiz-q .opt{text-align:left;background:var(--chip);border:2px solid transparent;
-  border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--ink);min-height:44px}
+  border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--ink);min-height:44px;box-shadow:var(--btn-sh)}
 .quiz-q .opt.right{background:var(--sel);color:var(--selink);border-color:var(--accent);font-weight:700}
 .quiz-q .opt.wrong{background:var(--fnbg);border-color:var(--brick);color:var(--brick)}
 .quiz-q .opt.wrong::before{content:"✗ ";color:#C62F24;font-weight:900}
