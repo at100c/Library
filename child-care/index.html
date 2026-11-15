@@ -277,7 +277,7 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
   #searchClear{top:20px}
 }
 </style>
-</head>
+<style>.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;z-index:2}#siteSearch{padding-left:34px !important}</style></head>
 <body>
 <div id="progressBar"></div>
 <header class="topbar">
@@ -293,7 +293,7 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
     <div class="tools">
       <div class="search-wrap">
         <svg class="search-ico" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="search" id="siteSearch" autocomplete="off" placeholder="搜索全站内容" aria-label="搜索全站内容 Search the whole site" role="combobox" aria-expanded="false" aria-controls="searchResults" aria-autocomplete="list">
+        <span class="search-ico" aria-hidden="true">🔍</span><input type="search" id="siteSearch" autocomplete="off" aria-label="搜索全站内容 Search the whole site" role="combobox" aria-expanded="false" aria-controls="searchResults" aria-autocomplete="list">
         <button type="button" id="searchClear" hidden aria-label="清空搜索 Clear search">×</button>
         <div class="search-results" id="searchResults" hidden role="listbox" aria-label="搜索结果 Search results"></div>
       </div>
@@ -433,7 +433,7 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
 
 <section data-scene="3" id="quick-index">
   <h2><span class="le" lang="en">Contents in the book’s order · searchable — tap an entry to expand it here</span><span class="lz">按原书目录的索引 · 可搜索（点条目就地展开）</span></h2>
-  <input type="search" id="chapSearch" placeholder="搜索章节" aria-label="搜索章节">
+  <input type="search" id="chapSearch" aria-label="搜索章节">
   <ul class="chaplist" id="chapList">
     <li class="chap-item"><button type="button" class="chap-head" aria-expanded="false"><span class="chap-title"><b><span class="le" lang="en">1.0 · Introduction</span><span class="lz">§1.0 · 绪论 Introduction</span></b></span><span class="chap-chev" aria-hidden="true">▾</span></button><div class="chap-panel" hidden><p><span class="le" lang="en">The intent of the Child Care Design Guidelines is to provide clarity for developers, architects and child care operators regarding the City’s expectations for the design and finish of child care facilities.</span><span class="lz">绪论与适用范围、规划原则，以及这份指引管哪些项目。</span></p><a class="go-btn" href="#/ch1"><span class="le" lang="en">Open this section →</span><span class="lz">进入本节 →</span></a> <button type="button" class="go-btn" data-jump="quick-cards"><span class="le" lang="en">See the core number cards →</span><span class="lz">去看核心数字卡 →</span></button></div></li>
     <li class="chap-item"><button type="button" class="chap-head" aria-expanded="false"><span class="chap-title"><b><span class="le" lang="en">2.0 · Definitions Pertaining to Child Care</span><span class="lz">§2.0 · 定义与项目类型 Definitions Pertaining to Child Care</span></b></span><span class="chap-chev" aria-hidden="true">▾</span></button><div class="chap-panel" hidden><p><span class="le" lang="en">Definitions pertaining to child care: program types, age groups and maximum group sizes are aligned here first.</span><span class="lz">年龄分段、项目类型与组规模的定义先在这里对齐。</span></p><a class="go-btn" href="#/ch2"><span class="le" lang="en">Open this section →</span><span class="lz">进入本节 →</span></a> <button type="button" class="go-btn" data-jump="quick-cats"><span class="le" lang="en">See all program types →</span><span class="lz">去看类别总览 →</span></button></div></li>
@@ -3261,7 +3261,7 @@ function applyLang(l){
   var btns = document.querySelectorAll("[data-lang-btn]");
   for (var i=0;i<btns.length;i++) btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lang-btn") === l ? "true" : "false");
   var cs = document.getElementById("chapSearch");
-  if (cs) cs.placeholder = l === "en" ? "Search chapters" : l === "bi" ? "Search chapters · 搜索章节" : "搜索章节";
+  if (cs) cs.placeholder = "";
   store.set("cc-lang", l);
   if (typeof runCalc === "function") runCalc();
   document.title = pageTitle(currentView);
@@ -3456,7 +3456,7 @@ checkResume();
   });
   function syncLangUI(){
     var l = curLang();
-    input.placeholder = l === "en" ? "Search the whole site" : l === "bi" ? "Search · 搜索全站内容" : "搜索全站内容";
+    input.placeholder = "";
     if (!box.hidden && lastQuery) doSearch(lastQuery);
   }
   if (window.MutationObserver) new MutationObserver(function(muts){
