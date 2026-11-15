@@ -91,6 +91,10 @@
     display:block;text-decoration:none;color:var(--ink);
     width:190px;text-align:center;
   }
+  .citytag{
+    text-align:center;font-weight:800;color:#191612;
+    font-size:18px;letter-spacing:.03em;margin:0 0 9px;
+  }
   a.bookitem img{
     display:block;width:100%;height:auto;border-radius:2px 5px 5px 2px;
     box-shadow:
@@ -148,16 +152,18 @@
     {
       href:"child-care/",
       cover:"cover.jpg",
+      city:"Richmond",
       title:"Child Care Design Guidelines",
-      sub:{en:"City of Richmond · December 2019",
-           zh:"Richmond 托儿所设计指引 · 交互版"}
+      sub:{en:"December 2019",
+           zh:"托儿所设计指引 · 交互版"}
     },
     {
       href:"burnaby-child-care/",
       cover:"cover-burnaby.jpg",
+      city:"Burnaby",
       title:"Building the Future: Child Care Design Principles and Guidelines",
-      sub:{en:"City of Burnaby · June 2024",
-           zh:"Burnaby 托儿所设计原则与指引 · 交互版"}
+      sub:{en:"June 2024",
+           zh:"托儿所设计原则与指引 · 交互版"}
     }
   ];
   var STR = {
@@ -178,7 +184,7 @@
   }
   function matches(book){
     if(!query) return true;
-    var hay = (book.title + " " + book.sub.en + " " + book.sub.zh).toLowerCase();
+    var hay = (book.title + " " + (book.city || "") + " " + book.sub.en + " " + book.sub.zh).toLowerCase();
     return hay.indexOf(query.toLowerCase()) >= 0;
   }
 
@@ -190,10 +196,11 @@
       any = true;
       var a = document.createElement("a");
       a.className = "bookitem"; a.href = b.href;
+      var ct = document.createElement("div"); ct.className = "citytag"; ct.textContent = b.city || "";
       var img = document.createElement("img"); img.src = b.cover; img.alt = b.title;
       var n = document.createElement("div"); n.className = "bname"; n.textContent = b.title;
       var s = document.createElement("div"); s.className = "bsub"; setBi(s, b.sub);
-      a.appendChild(img); a.appendChild(n); a.appendChild(s);
+      a.appendChild(ct); a.appendChild(img); a.appendChild(n); a.appendChild(s);
       grid.appendChild(a);
     });
     document.getElementById("noresult").style.display = any ? "none" : "block";
