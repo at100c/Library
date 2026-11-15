@@ -133,6 +133,7 @@ button.opt.right{border-color:rgba(53,104,92,.55);background:radial-gradient(120
 :root[data-theme="dark"] button.opt.right{ border-color:rgba(127,191,169,.55); background:radial-gradient(120% 130% at 50% 42%, rgba(127,191,169,.30), rgba(127,191,169,.10) 72%), var(--glass-bg); color:#A9DCCB }
 @media (prefers-color-scheme: dark){ button.opt.right{border-color:rgba(127,191,169,.55);background:radial-gradient(120% 130% at 50% 42%, rgba(127,191,169,.30), rgba(127,191,169,.10) 72%), var(--glass-bg);color:#A9DCCB} :root[data-theme="light"] button.opt.right{border-color:rgba(53,104,92,.55);background:radial-gradient(120% 130% at 50% 42%, rgba(53,104,92,.30), rgba(53,104,92,.10) 72%), var(--glass-bg);color:#2C574C} }
 button.opt.wrong{border-color:rgba(176,142,32,.55);background:var(--sel-bg);color:var(--sel-ink);font-weight:700}
+button.opt.wrong::before{content:"✗ ";color:#C62F24;font-weight:900}
 .reveal,.answer{border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:8px 12px;margin-top:10px;background:rgba(53,104,92,.08)}
 :root[data-theme="dark"] .reveal,:root[data-theme="dark"] .answer{ background:rgba(127,191,169,.10) }
 @media (prefers-color-scheme: dark){ .reveal,.answer{background:rgba(127,191,169,.10)} :root[data-theme="light"] .reveal,:root[data-theme="light"] .answer{background:rgba(53,104,92,.08)} }

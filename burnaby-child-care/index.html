@@ -168,6 +168,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
   border-radius:12px;padding:8px 16px;cursor:pointer;font-weight:600}
 .guess .opt.right{background:var(--sel);color:var(--selink);border-color:var(--accent)}
 .guess .opt.wrong{opacity:.45;text-decoration:line-through}
+.guess .opt.wrong::before{content:"✗ ";color:#C62F24;font-weight:900}
 .guess .reveal{display:none;margin-top:12px;background:var(--fnbg);border-radius:12px;padding:12px 14px}
 .guess.done .reveal{display:block}
 
@@ -179,6 +180,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
   border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--ink);min-height:44px}
 .quiz-q .opt.right{background:var(--sel);color:var(--selink);border-color:var(--accent);font-weight:700}
 .quiz-q .opt.wrong{background:var(--fnbg);border-color:var(--brick);color:var(--brick)}
+.quiz-q .opt.wrong::before{content:"✗ ";color:#C62F24;font-weight:900}
 .quiz-q .opt:disabled{cursor:default;opacity:.85}
 .quiz-q .opt.right:disabled,.quiz-q .opt.wrong:disabled{opacity:1}
 .quiz-q .expl{display:none;margin-top:8px;font-size:.88em;color:var(--muted)}
