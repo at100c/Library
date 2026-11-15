@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>书架 · Bookshelf</title>
+<title>图书馆 · Library</title>
 <style>
   :root{
     --bg:#FCFCFA;
@@ -13,6 +13,7 @@
     --shadow:14px 16px 34px rgba(150,142,122,.30), -10px -10px 24px rgba(255,255,255,.9);
     --shadow-hover:18px 22px 44px rgba(150,142,122,.38), -10px -10px 24px rgba(255,255,255,.9);
     --sel:#F6E189;
+    --sel-ink:#4A3803;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
@@ -22,10 +23,26 @@
     min-height:100vh;
     display:flex;flex-direction:column;align-items:center;
     padding:48px 20px 40px;
+    position:relative;
   }
+  .langbar{
+    position:absolute;top:18px;right:20px;
+    display:flex;gap:4px;
+    background:var(--panel);
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    padding:5px;
+  }
+  .langbar button{
+    border:none;background:transparent;cursor:pointer;
+    font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);
+    padding:7px 14px;border-radius:999px;
+    transition:background .2s ease,color .2s ease;
+  }
+  .langbar button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink)}
   header{text-align:center;margin-bottom:40px}
   header h1{font-size:30px;font-weight:700;letter-spacing:.04em}
-  header p{color:var(--muted);font-size:14px;margin-top:8px}
+  header p{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.6}
   main{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(230px,280px));
@@ -43,39 +60,92 @@
   }
   a.book:hover,a.book:focus-visible{box-shadow:var(--shadow-hover);transform:translateY(-3px)}
   a.book:active{transform:translateY(0)}
-  a.book img{
-    display:block;width:100%;height:auto;
-    border-radius:10px;
-  }
+  a.book img{display:block;width:100%;height:auto;border-radius:10px}
   .title{font-size:18px;font-weight:700;line-height:1.35;margin-top:16px}
-  .subtitle{font-size:14px;color:var(--ink);margin-top:5px}
+  .subtitle{font-size:14px;color:var(--ink);margin-top:5px;line-height:1.55}
   .meta{font-size:13px;color:var(--muted);margin-top:5px}
   .enter{
     display:inline-block;margin-top:14px;
-    background:var(--sel);color:#4A3803;
+    background:var(--sel);color:var(--sel-ink);
     font-size:14px;font-weight:600;
     padding:9px 18px;border-radius:999px;
   }
+  .bi{display:block}
+  .bi-zh{font-size:.92em;opacity:.85}
   footer{margin-top:52px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7}
 </style>
 </head>
 <body>
+  <nav class="langbar" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    <button type="button" data-lang="bi" aria-pressed="false">EN/中文</button>
+    <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+  </nav>
+
   <header>
-    <h1>书架</h1>
-    <p>把读过的书做成可以随手查的网页 · 点击封面进入</p>
+    <h1 data-i18n="h1">图书馆</h1>
+    <p data-i18n="tagline">把读过的书做成可以随手查的网页 · 点击封面进入</p>
   </header>
+
   <main>
-    <a class="book" href="child-care/" aria-label="进入 Child Care Design Guidelines 交互版">
+    <a class="book" href="child-care/" data-i18n-aria="open" aria-label="打开这本书">
       <img src="cover.jpg" alt="Child Care Design Guidelines 原书封面">
       <div class="title">Child Care Design Guidelines</div>
-      <div class="subtitle">Richmond 托儿所设计指引 · 交互版</div>
+      <div class="subtitle" data-i18n="booksub">Richmond 托儿所设计指引 · 交互版</div>
       <div class="meta">City of Richmond · December 2019</div>
-      <span class="enter">打开这本书 →</span>
+      <span class="enter" data-i18n="open">打开这本书 →</span>
     </a>
   </main>
-  <footer>
-    本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。<br>
-    Interactive notes based on a public document by the City of Richmond.
-  </footer>
+
+  <footer data-i18n="foot">本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。</footer>
+
+<script>
+  var STR = {
+    h1:     {en:"Library", zh:"图书馆"},
+    tagline:{en:"Books I have read, turned into pages I can look up anytime · click a cover to open it",
+             zh:"把读过的书做成可以随手查的网页 · 点击封面进入"},
+    booksub:{en:"Richmond child care design guidelines · interactive edition",
+             zh:"Richmond 托儿所设计指引 · 交互版"},
+    open:   {en:"Open this book →", zh:"打开这本书 →"},
+    foot:   {en:"Personal study notes, based on a public document published by the City of Richmond.",
+             zh:"本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。"}
+  };
+  var TITLES = {en:"Library", bi:"图书馆 · Library", zh:"图书馆 · Library"};
+
+  function applyLang(lang){
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var s = STR[el.getAttribute("data-i18n")];
+      if(!s) return;
+      if(lang === "en"){ el.textContent = s.en; }
+      else if(lang === "zh"){ el.textContent = s.zh; }
+      else {
+        el.innerHTML = "";
+        var a = document.createElement("span"); a.className = "bi"; a.textContent = s.en;
+        var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = s.zh;
+        el.appendChild(a); el.appendChild(b);
+      }
+    });
+    var book = document.querySelector("[data-i18n-aria]");
+    if(book){
+      var o = STR.open;
+      book.setAttribute("aria-label", lang === "en" ? o.en.replace(" →","") : o.zh.replace(" →",""));
+    }
+    document.title = TITLES[lang];
+    document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+    document.querySelectorAll(".langbar button").forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === lang ? "true" : "false");
+    });
+    try{ localStorage.setItem("library-lang", lang); }catch(e){}
+  }
+
+  var saved = "zh";
+  try{ saved = localStorage.getItem("library-lang") || "zh"; }catch(e){}
+  if(["en","bi","zh"].indexOf(saved) < 0) saved = "zh";
+  applyLang(saved);
+
+  document.querySelectorAll(".langbar button").forEach(function(btn){
+    btn.addEventListener("click", function(){ applyLang(btn.getAttribute("data-lang")); });
+  });
+</script>
 </body>
 </html>
