@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>图书馆 · LIBRARY</title>
+<title>图书馆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
@@ -12,11 +12,8 @@
     --bg:#F4EEE1;
     --bg-deep:#EFE7D5;
     --panel:#FFFDF7;
-    --ink:#3E382C;
+    --ink:#2B2721;
     --muted:#8A7D66;
-    --plank-top:#F1E8D2;
-    --plank-face:#DFD0AC;
-    --plank-edge:#CBB68F;
     --shadow:12px 14px 30px rgba(150,132,95,.28), -8px -8px 20px rgba(255,255,255,.75);
     --sel:#F6E189;
     --sel-ink:#4A3803;
@@ -27,29 +24,12 @@
     color:var(--ink);
     font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
     min-height:100vh;
-    padding:26px 22px 46px;
+    padding:26px 22px 60px;
   }
   .wrap{max-width:1060px;margin:0 auto}
 
   /* ---------- top bar ---------- */
-  .topbar{
-    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    margin-bottom:8px;
-  }
-  .views{
-    display:flex;gap:4px;background:rgba(255,253,247,.65);
-    border-radius:999px;padding:4px;
-    box-shadow:inset 0 1px 3px rgba(150,132,95,.25);
-  }
-  .views button{
-    border:none;background:transparent;cursor:pointer;font:inherit;
-    font-size:13.5px;font-weight:600;color:var(--muted);
-    padding:7px 16px;border-radius:999px;
-  }
-  .views button[aria-pressed="true"]{
-    background:var(--panel);color:var(--ink);
-    box-shadow:0 3px 8px rgba(150,132,95,.30);
-  }
+  .topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .search{
     flex:1 1 220px;max-width:420px;
     display:flex;align-items:center;gap:8px;
@@ -75,7 +55,8 @@
   }
   .langbar button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink)}
 
-  header{text-align:center;margin:30px 0 10px}
+  /* ---------- title ---------- */
+  header{text-align:center;margin:34px 0 8px}
   header h1{
     font-family:"Baloo 2","Zhi Mang Xing","Ma Shan Zheng",sans-serif;
     font-size:clamp(44px,7.5vw,64px);
@@ -90,127 +71,56 @@
       6px 6px 0 #6B6455,
       10px 14px 22px rgba(60,50,30,.35);
   }
-  header h1 .bi-zh{font-size:.8em;letter-spacing:.14em;opacity:1}
+  header h1 .bi-zh{font-size:.8em;letter-spacing:.14em}
+  .bi{display:block}
+  .bi-zh{font-size:.92em;opacity:.85}
 
-  /* ---------- shelves ---------- */
-  .shelf-block{margin-top:46px}
-  .shelf-head{
-    display:flex;align-items:baseline;justify-content:space-between;
-    padding:0 6px;margin-bottom:14px;
+  /* ---------- books: front view + bottom-right shadow ---------- */
+  .bookgrid{
+    display:flex;flex-wrap:wrap;gap:52px 56px;
+    justify-content:center;
+    margin-top:52px;
   }
-  .shelf-name{font-size:15px;font-weight:600;color:#6B5F49}
-  .shelf-name .bi-zh{font-weight:500}
-  .books{
-    display:flex;align-items:flex-end;gap:30px;flex-wrap:wrap;
-    padding:0 36px;
+  a.bookitem{
+    display:block;text-decoration:none;color:var(--ink);
+    width:190px;text-align:center;
   }
-  a.book-standing{display:block;text-decoration:none}
-  .scene{perspective:1000px;padding:6px 10px 0 16px}
-  .cuboid{
-    position:relative;width:138px;height:178px;
-    transform-style:preserve-3d;
-    transform:rotateY(-24deg) rotateX(2deg);
-    transition:transform .35s ease;
-  }
-  a.book-standing:hover .cuboid,a.book-standing:focus-visible .cuboid{
-    transform:rotateY(-15deg) rotateX(1deg) translateY(-5px);
-  }
-  .cuboid .face{position:absolute;backface-visibility:visible}
-  .cuboid .front{
-    inset:0;transform:translateZ(17px);
-    border-radius:2px 5px 5px 2px;overflow:hidden;
-    box-shadow:inset 3px 0 6px rgba(255,255,255,.35), inset -2px 0 4px rgba(0,0,0,.18);
-  }
-  .cuboid .front img{display:block;width:100%;height:100%;object-fit:cover}
-  .cuboid .front::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 5%, rgba(255,255,255,.28) 9%, rgba(0,0,0,.10) 14%, rgba(0,0,0,0) 22%);
-  }
-  .cuboid .back{inset:0;transform:translateZ(-17px);background:#4A4234;border-radius:2px 5px 5px 2px}
-  .cuboid .spine{
-    top:0;left:-17px;width:34px;height:100%;
-    transform:rotateY(90deg);
-    background:linear-gradient(180deg,#0E7373 0%,#0A5656 55%,#073F3F 100%);
-    box-shadow:inset 0 0 12px rgba(0,0,0,.45);
-  }
-  .cuboid .pages{
-    top:1.5%;right:-17px;width:34px;height:97%;
-    transform:rotateY(90deg);
-    background:repeating-linear-gradient(90deg,#FFFDF2 0 2px,#E9E1CB 2px 3px,#FBF7E9 3px 5px);
-    box-shadow:inset 0 0 8px rgba(120,100,60,.35);
-  }
-  .book-shadow{
-    width:150px;height:20px;margin:-20px 0 0 8px;
-    background:radial-gradient(ellipse at center, rgba(74,60,30,.55) 0%, rgba(74,60,30,.28) 55%, rgba(74,60,30,0) 75%);
-    filter:blur(3px);
-  }
-  .plank{
-    position:relative;
-    height:30px;margin-top:-2px;border-radius:3px;
-    background:linear-gradient(180deg,#F7EFDA 0%,var(--plank-top) 18%,var(--plank-face) 55%,#BFA678 100%);
+  a.bookitem img{
+    display:block;width:100%;height:auto;border-radius:2px 5px 5px 2px;
     box-shadow:
-      inset 0 2px 2px rgba(255,255,255,.85),
-      inset 0 -4px 6px rgba(120,98,55,.55),
-      0 7px 10px -2px rgba(90,74,40,.55),
-      0 16px 20px -8px rgba(101,84,50,.50),
-      0 4px 6px rgba(120,100,60,.35);
+      7px 9px 14px rgba(74,60,30,.38),
+      20px 28px 38px rgba(74,60,30,.30);
+    transition:transform .25s ease, box-shadow .25s ease;
   }
-  .plank::after{
-    content:"";position:absolute;left:1.5%;right:1.5%;top:100%;height:48px;
-    background:linear-gradient(180deg, rgba(101,84,50,.52) 0%, rgba(101,84,50,.22) 55%, rgba(101,84,50,0) 100%);
-    filter:blur(4px);
-    pointer-events:none;
+  a.bookitem:hover img,a.bookitem:focus-visible img{
+    transform:translate(-3px,-5px);
+    box-shadow:
+      10px 13px 18px rgba(74,60,30,.40),
+      27px 36px 46px rgba(74,60,30,.32);
+  }
+  .bname{
+    margin-top:20px;font-size:16.5px;font-weight:700;line-height:1.4;
+  }
+  .bsub{
+    margin-top:4px;font-size:13px;color:var(--muted);line-height:1.55;
   }
   .noresult{
     display:none;text-align:center;color:var(--muted);
     font-size:14px;margin-top:56px;line-height:1.7;
   }
-
-  /* ---------- all books grid ---------- */
-  .grid{
-    display:none;
-    grid-template-columns:repeat(auto-fill,minmax(230px,280px));
-    gap:36px;justify-content:center;margin-top:30px;
-  }
-  a.book-card{
-    display:block;text-decoration:none;color:var(--ink);
-    background:var(--panel);border-radius:20px;box-shadow:var(--shadow);
-    padding:18px 18px 20px;
-    transition:transform .25s ease;
-  }
-  a.book-card:hover{transform:translateY(-3px)}
-  a.book-card img{display:block;width:100%;height:auto;border-radius:10px}
-  .title{font-size:18px;font-weight:700;line-height:1.35;margin-top:16px}
-  .subtitle{font-size:14px;margin-top:5px;line-height:1.55}
-  .meta{font-size:13px;color:var(--muted);margin-top:5px}
-  .enter{
-    display:inline-block;margin-top:14px;background:var(--sel);color:var(--sel-ink);
-    font-size:14px;font-weight:600;padding:9px 18px;border-radius:999px;
-  }
-  .bi{display:block}
-  .bi-zh{font-size:.92em;opacity:.85}
-  footer{margin-top:56px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7}
-
-  body[data-view="grid"] .shelves{display:none}
-  body[data-view="grid"] .grid{display:grid}
   @media (max-width:560px){
-    .cuboid{width:108px;height:140px}
-    .book-shadow{width:118px}
-    .books{gap:20px;padding:0 18px}
+    a.bookitem{width:150px}
+    .bookgrid{gap:40px 28px}
   }
 </style>
 </head>
-<body data-view="shelves">
+<body>
 <div class="wrap">
 
   <div class="topbar">
-    <div class="views" role="group" aria-label="View">
-      <button type="button" data-view="shelves" aria-pressed="true" data-i18n="v_shelves">书架</button>
-      <button type="button" data-view="grid" aria-pressed="false" data-i18n="v_all">全部图书</button>
-    </div>
     <label class="search">
       <span aria-hidden="true">⌕</span>
-      <input type="search" id="q" data-i18n-ph="search_ph" placeholder="在我的图书馆里搜索">
+      <input type="search" id="q" placeholder="在我的图书馆里搜索">
     </label>
     <nav class="langbar" aria-label="Language">
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -223,8 +133,7 @@
     <h1 data-i18n="h1">图书馆</h1>
   </header>
 
-  <div class="shelves" id="shelves"></div>
-  <div class="grid" id="grid"></div>
+  <div class="bookgrid" id="bookgrid"></div>
   <p class="noresult" id="noresult" data-i18n="noresult">没有找到这本书。</p>
 </div>
 
@@ -234,34 +143,18 @@
       href:"child-care/",
       cover:"cover.jpg",
       title:"Child Care Design Guidelines",
-      sub:{en:"Richmond child care design guidelines · interactive edition",
-           zh:"Richmond 托儿所设计指引 · 交互版"},
-      meta:"City of Richmond · December 2019",
-      spine:"linear-gradient(180deg,#12A0A0 0%,#0C6B6B 55%,#084C4C 100%)",
-      shelf:"finished"
+      sub:{en:"City of Richmond · December 2019",
+           zh:"Richmond 托儿所设计指引 · 交互版"}
     }
-  ];
-  var SHELVES = [
-    {id:"reading",  name:{en:"Currently reading", zh:"正在读"}},
-    {id:"next",     name:{en:"Next up",           zh:"接下来"}},
-    {id:"finished", name:{en:"Finished",          zh:"已读完"}}
   ];
   var STR = {
     h1:{en:"LIBRARY", zh:"图书馆"},
-    v_shelves:{en:"Shelves", zh:"书架"},
-    v_all:{en:"All Books", zh:"全部图书"},
     search_ph:{en:"Search in My library", zh:"在我的图书馆里搜索"},
-    open:{en:"Open this book →", zh:"打开这本书 →"},
     noresult:{en:"No book matches your search.", zh:"没有找到这本书。"}
   };
   var TITLES = {en:"LIBRARY", bi:"图书馆 · LIBRARY", zh:"图书馆"};
   var lang = "zh", query = "";
 
-  function pick(s){
-    if(lang === "en") return s.en;
-    if(lang === "zh") return s.zh;
-    return s.en + "\n" + s.zh;
-  }
   function setBi(el, s){
     if(lang === "en"){ el.textContent = s.en; return; }
     if(lang === "zh"){ el.textContent = s.zh; return; }
@@ -272,79 +165,40 @@
   }
   function matches(book){
     if(!query) return true;
-    var hay = (book.title + " " + book.sub.en + " " + book.sub.zh + " " + book.meta).toLowerCase();
+    var hay = (book.title + " " + book.sub.en + " " + book.sub.zh).toLowerCase();
     return hay.indexOf(query.toLowerCase()) >= 0;
   }
 
   function render(){
-    var shelvesEl = document.getElementById("shelves");
-    var gridEl = document.getElementById("grid");
-    shelvesEl.innerHTML = ""; gridEl.innerHTML = "";
-    var anyVisible = false;
-
-    SHELVES.forEach(function(sh){
-      var books = BOOKS.filter(function(b){ return b.shelf === sh.id && matches(b); });
-      if(!books.length) return;
-      anyVisible = true;
-      var block = document.createElement("section"); block.className = "shelf-block";
-      var head = document.createElement("div"); head.className = "shelf-head";
-      var name = document.createElement("div"); name.className = "shelf-name"; setBi(name, sh.name);
-      head.appendChild(name); block.appendChild(head);
-      var row = document.createElement("div"); row.className = "books";
-      books.forEach(function(b){
-        var a = document.createElement("a");
-        a.className = "book-standing"; a.href = b.href;
-        a.setAttribute("aria-label", b.title);
-        var scene = document.createElement("div"); scene.className = "scene";
-        var cub = document.createElement("div"); cub.className = "cuboid";
-        var back = document.createElement("div"); back.className = "face back";
-        var spine = document.createElement("div"); spine.className = "face spine";
-        if(b.spine) spine.style.background = b.spine;
-        var pages = document.createElement("div"); pages.className = "face pages";
-        var front = document.createElement("div"); front.className = "face front";
-        var img = document.createElement("img"); img.src = b.cover; img.alt = b.title;
-        front.appendChild(img);
-        cub.appendChild(back); cub.appendChild(spine); cub.appendChild(pages); cub.appendChild(front);
-        scene.appendChild(cub);
-        var sh = document.createElement("div"); sh.className = "book-shadow";
-        a.appendChild(scene); a.appendChild(sh);
-        row.appendChild(a);
-      });
-      block.appendChild(row);
-      var plank = document.createElement("div"); plank.className = "plank";
-      block.appendChild(plank);
-      shelvesEl.appendChild(block);
-    });
-
+    var grid = document.getElementById("bookgrid");
+    grid.innerHTML = "";
+    var any = false;
     BOOKS.filter(matches).forEach(function(b){
-      anyVisible = true;
+      any = true;
       var a = document.createElement("a");
-      a.className = "book-card"; a.href = b.href;
+      a.className = "bookitem"; a.href = b.href;
       var img = document.createElement("img"); img.src = b.cover; img.alt = b.title;
-      var t = document.createElement("div"); t.className = "title"; t.textContent = b.title;
-      var s = document.createElement("div"); s.className = "subtitle"; setBi(s, b.sub);
-      var m = document.createElement("div"); m.className = "meta"; m.textContent = b.meta;
-      var e = document.createElement("span"); e.className = "enter"; setBi(e, STR.open);
-      a.appendChild(img); a.appendChild(t); a.appendChild(s); a.appendChild(m); a.appendChild(e);
-      gridEl.appendChild(a);
+      var n = document.createElement("div"); n.className = "bname"; n.textContent = b.title;
+      var s = document.createElement("div"); s.className = "bsub"; setBi(s, b.sub);
+      a.appendChild(img); a.appendChild(n); a.appendChild(s);
+      grid.appendChild(a);
     });
-
-    document.getElementById("noresult").style.display = anyVisible ? "none" : "block";
+    document.getElementById("noresult").style.display = any ? "none" : "block";
   }
 
   function applyLang(l){
     lang = l;
-    document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var key = el.getAttribute("data-i18n"); var s = STR[key]; if(!s) return;
-      if(key === "h1" && lang === "bi"){
-        el.innerHTML = "";
-        var a = document.createElement("span"); a.className = "bi"; a.textContent = "LIBRARY";
-        var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = "图书馆";
-        el.appendChild(a); el.appendChild(b);
-      } else { setBi(el, s); }
-    });
-    var q = document.getElementById("q");
-    q.placeholder = pick(STR.search_ph).split("\n")[0];
+    var h1 = document.querySelector("[data-i18n='h1']");
+    if(lang === "bi"){
+      h1.innerHTML = "";
+      var a = document.createElement("span"); a.className = "bi"; a.textContent = "LIBRARY";
+      var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = "图书馆";
+      h1.appendChild(a); h1.appendChild(b);
+    } else {
+      setBi(h1, STR.h1);
+    }
+    var nr = document.getElementById("noresult"); setBi(nr, STR.noresult);
+    document.getElementById("q").placeholder = (lang === "en" ? STR.search_ph.en : STR.search_ph.zh);
     document.title = TITLES[lang];
     document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
     document.querySelectorAll(".langbar button").forEach(function(btn){
@@ -356,14 +210,6 @@
 
   document.querySelectorAll(".langbar button").forEach(function(btn){
     btn.addEventListener("click", function(){ applyLang(btn.getAttribute("data-lang")); });
-  });
-  document.querySelectorAll(".views button").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      document.body.setAttribute("data-view", btn.getAttribute("data-view"));
-      document.querySelectorAll(".views button").forEach(function(b2){
-        b2.setAttribute("aria-pressed", b2 === btn ? "true" : "false");
-      });
-    });
   });
   document.getElementById("q").addEventListener("input", function(ev){
     query = ev.target.value.trim(); render();
