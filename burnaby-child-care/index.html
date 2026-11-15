@@ -211,8 +211,8 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
     </div>
     <div class="tool-group" role="group" aria-label="Language">
       <button class="tbtn lang-btn" data-setlang="en">EN</button>
-      <button class="tbtn lang-btn" data-setlang="bi"><span class="lz">双语</span><span class="le">Bilingual</span></button>
-      <button class="tbtn lang-btn" data-setlang="zh"><span class="lz">中文</span><span class="le">中文</span></button>
+      <button class="tbtn lang-btn" data-setlang="bi">EN/中文</button>
+      <button class="tbtn lang-btn" data-setlang="zh">中文</button>
     </div>
     <div class="tool-group" role="group" aria-label="Font size">
       <button class="tbtn" id="fsDown" aria-label="Decrease font size">A−</button>
@@ -220,7 +220,7 @@ figcaption{font-size:.88em;color:var(--muted);margin-top:8px}
       <button class="tbtn" id="fsUp" aria-label="Increase font size">A+</button>
     </div>
     <div class="tool-group">
-      <button class="tbtn" id="themeBtn" aria-label="Toggle dark mode">🌙 <span class="lz">明暗</span><span class="le">Theme</span></button>
+      
     </div>
   </div>
   <div class="searchbar">
@@ -1056,13 +1056,7 @@ function setTheme(t){
   try{ localStorage.setItem("bb-theme", t); }catch(e){}
   document.getElementById("themeBtn").firstChild.textContent = (t==="dark" ? "☀️ " : "🌙 ");
 }
-var savedTheme = "";
-try{ savedTheme = localStorage.getItem("bb-theme") || ""; }catch(e){}
-if(!savedTheme) savedTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-setTheme(savedTheme);
-document.getElementById("themeBtn").addEventListener("click", function(){
-  setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-});
+document.documentElement.dataset.theme = "light";
 
 /* ===== 角标：原文弹窗 ===== */
 var fnOverlay = document.getElementById("fnOverlay");

@@ -297,11 +297,11 @@ button.go-btn,a.go-btn{font-size:calc(15px * var(--font-scale))}
         <button type="button" id="searchClear" hidden aria-label="清空搜索 Clear search">×</button>
         <div class="search-results" id="searchResults" hidden role="listbox" aria-label="搜索结果 Search results"></div>
       </div>
-      <div class="lang-switch" role="group" aria-label="Language 语言切换"><button type="button" data-lang-btn="en" aria-pressed="false">EN</button><button type="button" data-lang-btn="bi" aria-pressed="false">双语</button><button type="button" data-lang-btn="zh" aria-pressed="true">中文</button></div>
+      <div class="lang-switch" role="group" aria-label="Language 语言切换"><button type="button" data-lang-btn="en" aria-pressed="false">EN</button><button type="button" data-lang-btn="bi" aria-pressed="false">EN/中文</button><button type="button" data-lang-btn="zh" aria-pressed="true">中文</button></div>
       <button type="button" id="fontMinus" aria-label="减小字号">A−</button>
       <button type="button" id="fontPlus" aria-label="增大字号">A+</button>
       <span id="fontLevel" aria-live="polite" title="当前字号档位" style="display:inline-block;min-width:50px;text-align:center;font-weight:700;font-size:13px">100%</span>
-      <button id="themeBtn" aria-label="切换明暗 Toggle theme"><span class="le" lang="en">Theme</span><span class="lz">明暗</span></button>
+      
     </div>
   </div>
 </header>
@@ -3225,15 +3225,7 @@ function applyFont(){
 document.getElementById("fontPlus").addEventListener("click", function(){ if(fsLevel<3){ fsLevel++; store.set("cc-fontsize", String(fsLevel)); applyFont(); } });
 document.getElementById("fontMinus").addEventListener("click", function(){ if(fsLevel>-2){ fsLevel--; store.set("cc-fontsize", String(fsLevel)); applyFont(); } });
 applyFont();
-var savedTheme = store.get("cc-theme");
-if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
-document.getElementById("themeBtn").addEventListener("click", function(){
-  var cur = document.documentElement.getAttribute("data-theme");
-  var isDark = cur === "dark" || (!cur && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var next = isDark ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  store.set("cc-theme", next);
-});
+document.documentElement.setAttribute("data-theme", "light");
 /* 阅读进度 */
 var resumeBar = document.getElementById("resumeBar");
 function checkResume(){
