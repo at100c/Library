@@ -3029,7 +3029,7 @@ for (var r=0;r<routeLinks.length;r++){
     showView(v);
     var st = this.getAttribute("data-scrollto");
     var stEl = st ? document.getElementById(st) : null;
-    if (stEl){ stEl.scrollIntoView(); } else { window.scrollTo(0,0); }
+    if (stEl){ stEl.scrollIntoView(); setTimeout(function(){ stEl.scrollIntoView(); }, 150); setTimeout(function(){ stEl.scrollIntoView(); }, 450); } else { window.scrollTo(0,0); }
     checkResume();
   });
 }
