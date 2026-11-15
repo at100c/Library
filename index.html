@@ -58,7 +58,7 @@
   /* ---------- title ---------- */
   header{text-align:center;margin:34px 0 8px}
   header h1{
-    font-family:"Baloo 2","Zhi Mang Xing","Ma Shan Zheng",sans-serif;
+    font-family:"Baloo 2","Ma Shan Zheng","Zhi Mang Xing",sans-serif;
     font-size:clamp(44px,7.5vw,64px);
     font-weight:800;
     letter-spacing:.06em;
@@ -71,7 +71,8 @@
       6px 6px 0 #6B6455,
       10px 14px 22px rgba(60,50,30,.35);
   }
-  header h1 .bi-zh{font-size:.8em;letter-spacing:.14em}
+  header h1.flat{text-shadow:none}
+  header h1 .bi-zh{font-size:.8em;letter-spacing:.14em;text-shadow:none}
   .bi{display:block}
   .bi-zh{font-size:.92em;opacity:.85}
 
@@ -189,6 +190,7 @@
   function applyLang(l){
     lang = l;
     var h1 = document.querySelector("[data-i18n='h1']");
+    h1.classList.toggle("flat", lang === "zh");
     if(lang === "bi"){
       h1.innerHTML = "";
       var a = document.createElement("span"); a.className = "bi"; a.textContent = "LIBRARY";
