@@ -6,146 +6,301 @@
 <title>图书馆 · Library</title>
 <style>
   :root{
-    --bg:#FCFCFA;
-    --panel:#FFFFFF;
-    --ink:#2E2B25;
-    --muted:#6E675C;
-    --shadow:14px 16px 34px rgba(150,142,122,.30), -10px -10px 24px rgba(255,255,255,.9);
-    --shadow-hover:18px 22px 44px rgba(150,142,122,.38), -10px -10px 24px rgba(255,255,255,.9);
+    --bg:#F4EEE1;
+    --bg-deep:#EFE7D5;
+    --panel:#FFFDF7;
+    --ink:#3E382C;
+    --muted:#8A7D66;
+    --plank-top:#F1E8D2;
+    --plank-face:#DFD0AC;
+    --plank-edge:#CBB68F;
+    --shadow:12px 14px 30px rgba(150,132,95,.28), -8px -8px 20px rgba(255,255,255,.75);
     --sel:#F6E189;
     --sel-ink:#4A3803;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    background:var(--bg);
+    background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 100%);
     color:var(--ink);
     font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
     min-height:100vh;
-    display:flex;flex-direction:column;align-items:center;
-    padding:48px 20px 40px;
-    position:relative;
+    padding:26px 22px 46px;
   }
+  .wrap{max-width:1060px;margin:0 auto}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+  .views{
+    display:flex;gap:4px;background:rgba(255,253,247,.65);
+    border-radius:999px;padding:4px;
+    box-shadow:inset 0 1px 3px rgba(150,132,95,.25);
+  }
+  .views button{
+    border:none;background:transparent;cursor:pointer;font:inherit;
+    font-size:13.5px;font-weight:600;color:var(--muted);
+    padding:7px 16px;border-radius:999px;
+  }
+  .views button[aria-pressed="true"]{
+    background:var(--panel);color:var(--ink);
+    box-shadow:0 3px 8px rgba(150,132,95,.30);
+  }
+  .search{
+    flex:1 1 220px;max-width:420px;
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,253,247,.65);
+    border-radius:999px;padding:8px 16px;
+    box-shadow:inset 0 1px 3px rgba(150,132,95,.25);
+  }
+  .search span{color:var(--muted);font-size:14px}
+  .search input{
+    border:none;background:transparent;outline:none;font:inherit;
+    font-size:13.5px;color:var(--ink);width:100%;
+  }
+  .search input::placeholder{color:var(--muted)}
   .langbar{
-    position:absolute;top:18px;right:20px;
-    display:flex;gap:4px;
-    background:var(--panel);
-    border-radius:999px;
-    box-shadow:var(--shadow);
-    padding:5px;
+    margin-left:auto;
+    display:flex;gap:4px;background:var(--panel);
+    border-radius:999px;box-shadow:var(--shadow);padding:5px;
   }
   .langbar button{
-    border:none;background:transparent;cursor:pointer;
-    font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);
+    border:none;background:transparent;cursor:pointer;font:inherit;
+    font-size:13.5px;font-weight:600;color:var(--muted);
     padding:7px 14px;border-radius:999px;
-    transition:background .2s ease,color .2s ease;
   }
   .langbar button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink)}
-  header{text-align:center;margin-bottom:40px}
+
+  header{text-align:center;margin:26px 0 6px}
   header h1{font-size:30px;font-weight:700;letter-spacing:.04em}
   header p{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.6}
-  main{
-    display:grid;
+
+  /* ---------- shelves ---------- */
+  .shelf-block{margin-top:34px}
+  .shelf-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:0 6px;margin-bottom:14px;
+  }
+  .shelf-name{font-size:15px;font-weight:600;color:#6B5F49}
+  .shelf-name .bi-zh{font-weight:500}
+  .books{
+    display:flex;align-items:flex-end;gap:30px;flex-wrap:wrap;
+    padding:0 36px;
+  }
+  a.book-standing{
+    display:block;text-decoration:none;
+    transition:transform .22s ease;
+  }
+  a.book-standing:hover,a.book-standing:focus-visible{transform:translateY(-6px)}
+  a.book-standing img{
+    display:block;height:178px;width:auto;border-radius:3px 6px 6px 3px;
+    box-shadow:6px 8px 16px rgba(94,78,48,.35), inset 2px 0 3px rgba(255,255,255,.35);
+  }
+  .plank{
+    height:17px;margin-top:-2px;border-radius:3px;
+    background:linear-gradient(180deg,var(--plank-top) 0%,var(--plank-face) 55%,#D3BF96 100%);
+    box-shadow:0 22px 22px -10px rgba(120,100,60,.45), 0 3px 5px rgba(120,100,60,.25);
+  }
+  .noresult{
+    display:none;text-align:center;color:var(--muted);
+    font-size:14px;margin-top:56px;line-height:1.7;
+  }
+
+  /* ---------- all books grid ---------- */
+  .grid{
+    display:none;
     grid-template-columns:repeat(auto-fill,minmax(230px,280px));
-    gap:36px;
-    justify-content:center;
-    width:100%;max-width:1080px;
+    gap:36px;justify-content:center;margin-top:30px;
   }
-  a.book{
+  a.book-card{
     display:block;text-decoration:none;color:var(--ink);
-    background:var(--panel);
-    border-radius:20px;
-    box-shadow:var(--shadow);
+    background:var(--panel);border-radius:20px;box-shadow:var(--shadow);
     padding:18px 18px 20px;
-    transition:box-shadow .25s ease, transform .25s ease;
+    transition:transform .25s ease;
   }
-  a.book:hover,a.book:focus-visible{box-shadow:var(--shadow-hover);transform:translateY(-3px)}
-  a.book:active{transform:translateY(0)}
-  a.book img{display:block;width:100%;height:auto;border-radius:10px}
+  a.book-card:hover{transform:translateY(-3px)}
+  a.book-card img{display:block;width:100%;height:auto;border-radius:10px}
   .title{font-size:18px;font-weight:700;line-height:1.35;margin-top:16px}
-  .subtitle{font-size:14px;color:var(--ink);margin-top:5px;line-height:1.55}
+  .subtitle{font-size:14px;margin-top:5px;line-height:1.55}
   .meta{font-size:13px;color:var(--muted);margin-top:5px}
   .enter{
-    display:inline-block;margin-top:14px;
-    background:var(--sel);color:var(--sel-ink);
-    font-size:14px;font-weight:600;
-    padding:9px 18px;border-radius:999px;
+    display:inline-block;margin-top:14px;background:var(--sel);color:var(--sel-ink);
+    font-size:14px;font-weight:600;padding:9px 18px;border-radius:999px;
   }
   .bi{display:block}
   .bi-zh{font-size:.92em;opacity:.85}
-  footer{margin-top:52px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7}
+  footer{margin-top:56px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7}
+
+  body[data-view="grid"] .shelves{display:none}
+  body[data-view="grid"] .grid{display:grid}
+  @media (max-width:560px){
+    a.book-standing img{height:140px}
+    .books{gap:20px;padding:0 18px}
+  }
 </style>
 </head>
-<body>
-  <nav class="langbar" aria-label="Language">
-    <button type="button" data-lang="en" aria-pressed="false">EN</button>
-    <button type="button" data-lang="bi" aria-pressed="false">EN/中文</button>
-    <button type="button" data-lang="zh" aria-pressed="true">中文</button>
-  </nav>
+<body data-view="shelves">
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="views" role="group" aria-label="View">
+      <button type="button" data-view="shelves" aria-pressed="true" data-i18n="v_shelves">书架</button>
+      <button type="button" data-view="grid" aria-pressed="false" data-i18n="v_all">全部图书</button>
+    </div>
+    <label class="search">
+      <span aria-hidden="true">⌕</span>
+      <input type="search" id="q" data-i18n-ph="search_ph" placeholder="在我的图书馆里搜索">
+    </label>
+    <nav class="langbar" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-lang="bi" aria-pressed="false">EN/中文</button>
+      <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+    </nav>
+  </div>
 
   <header>
     <h1 data-i18n="h1">图书馆</h1>
     <p data-i18n="tagline">把读过的书做成可以随手查的网页 · 点击封面进入</p>
   </header>
 
-  <main>
-    <a class="book" href="child-care/" data-i18n-aria="open" aria-label="打开这本书">
-      <img src="cover.jpg" alt="Child Care Design Guidelines 原书封面">
-      <div class="title">Child Care Design Guidelines</div>
-      <div class="subtitle" data-i18n="booksub">Richmond 托儿所设计指引 · 交互版</div>
-      <div class="meta">City of Richmond · December 2019</div>
-      <span class="enter" data-i18n="open">打开这本书 →</span>
-    </a>
-  </main>
+  <div class="shelves" id="shelves"></div>
+  <div class="grid" id="grid"></div>
+  <p class="noresult" id="noresult" data-i18n="noresult">没有找到这本书。</p>
 
   <footer data-i18n="foot">本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。</footer>
+</div>
 
 <script>
+  var BOOKS = [
+    {
+      href:"child-care/",
+      cover:"cover.jpg",
+      title:"Child Care Design Guidelines",
+      sub:{en:"Richmond child care design guidelines · interactive edition",
+           zh:"Richmond 托儿所设计指引 · 交互版"},
+      meta:"City of Richmond · December 2019",
+      shelf:"finished"
+    }
+  ];
+  var SHELVES = [
+    {id:"reading",  name:{en:"Currently reading", zh:"正在读"}},
+    {id:"next",     name:{en:"Next up",           zh:"接下来"}},
+    {id:"finished", name:{en:"Finished",          zh:"已读完"}}
+  ];
   var STR = {
-    h1:     {en:"Library", zh:"图书馆"},
+    h1:{en:"Library", zh:"图书馆"},
     tagline:{en:"Books I have read, turned into pages I can look up anytime · click a cover to open it",
              zh:"把读过的书做成可以随手查的网页 · 点击封面进入"},
-    booksub:{en:"Richmond child care design guidelines · interactive edition",
-             zh:"Richmond 托儿所设计指引 · 交互版"},
-    open:   {en:"Open this book →", zh:"打开这本书 →"},
-    foot:   {en:"Personal study notes, based on a public document published by the City of Richmond.",
-             zh:"本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。"}
+    v_shelves:{en:"Shelves", zh:"书架"},
+    v_all:{en:"All Books", zh:"全部图书"},
+    search_ph:{en:"Search in My library", zh:"在我的图书馆里搜索"},
+    open:{en:"Open this book →", zh:"打开这本书 →"},
+    noresult:{en:"No book matches your search.", zh:"没有找到这本书。"},
+    foot:{en:"Personal study notes, based on a public document published by the City of Richmond.",
+          zh:"本站为个人学习整理，内容来源为 City of Richmond 公开发布的设计指引文件。"}
   };
   var TITLES = {en:"Library", bi:"图书馆 · Library", zh:"图书馆 · Library"};
+  var lang = "zh", query = "";
 
-  function applyLang(lang){
-    document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var s = STR[el.getAttribute("data-i18n")];
-      if(!s) return;
-      if(lang === "en"){ el.textContent = s.en; }
-      else if(lang === "zh"){ el.textContent = s.zh; }
-      else {
-        el.innerHTML = "";
-        var a = document.createElement("span"); a.className = "bi"; a.textContent = s.en;
-        var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = s.zh;
-        el.appendChild(a); el.appendChild(b);
-      }
+  function pick(s){
+    if(lang === "en") return s.en;
+    if(lang === "zh") return s.zh;
+    return s.en + "\n" + s.zh;
+  }
+  function setBi(el, s){
+    if(lang === "en"){ el.textContent = s.en; return; }
+    if(lang === "zh"){ el.textContent = s.zh; return; }
+    el.innerHTML = "";
+    var a = document.createElement("span"); a.className = "bi"; a.textContent = s.en;
+    var b = document.createElement("span"); b.className = "bi bi-zh"; b.textContent = s.zh;
+    el.appendChild(a); el.appendChild(b);
+  }
+  function matches(book){
+    if(!query) return true;
+    var hay = (book.title + " " + book.sub.en + " " + book.sub.zh + " " + book.meta).toLowerCase();
+    return hay.indexOf(query.toLowerCase()) >= 0;
+  }
+
+  function render(){
+    var shelvesEl = document.getElementById("shelves");
+    var gridEl = document.getElementById("grid");
+    shelvesEl.innerHTML = ""; gridEl.innerHTML = "";
+    var anyVisible = false;
+
+    SHELVES.forEach(function(sh){
+      var books = BOOKS.filter(function(b){ return b.shelf === sh.id && matches(b); });
+      if(!books.length) return;
+      anyVisible = true;
+      var block = document.createElement("section"); block.className = "shelf-block";
+      var head = document.createElement("div"); head.className = "shelf-head";
+      var name = document.createElement("div"); name.className = "shelf-name"; setBi(name, sh.name);
+      head.appendChild(name); block.appendChild(head);
+      var row = document.createElement("div"); row.className = "books";
+      books.forEach(function(b){
+        var a = document.createElement("a");
+        a.className = "book-standing"; a.href = b.href;
+        a.setAttribute("aria-label", b.title);
+        var img = document.createElement("img"); img.src = b.cover; img.alt = b.title;
+        a.appendChild(img); row.appendChild(a);
+      });
+      block.appendChild(row);
+      var plank = document.createElement("div"); plank.className = "plank";
+      block.appendChild(plank);
+      shelvesEl.appendChild(block);
     });
-    var book = document.querySelector("[data-i18n-aria]");
-    if(book){
-      var o = STR.open;
-      book.setAttribute("aria-label", lang === "en" ? o.en.replace(" →","") : o.zh.replace(" →",""));
-    }
+
+    BOOKS.filter(matches).forEach(function(b){
+      anyVisible = true;
+      var a = document.createElement("a");
+      a.className = "book-card"; a.href = b.href;
+      var img = document.createElement("img"); img.src = b.cover; img.alt = b.title;
+      var t = document.createElement("div"); t.className = "title"; t.textContent = b.title;
+      var s = document.createElement("div"); s.className = "subtitle"; setBi(s, b.sub);
+      var m = document.createElement("div"); m.className = "meta"; m.textContent = b.meta;
+      var e = document.createElement("span"); e.className = "enter"; setBi(e, STR.open);
+      a.appendChild(img); a.appendChild(t); a.appendChild(s); a.appendChild(m); a.appendChild(e);
+      gridEl.appendChild(a);
+    });
+
+    document.getElementById("noresult").style.display = anyVisible ? "none" : "block";
+  }
+
+  function applyLang(l){
+    lang = l;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var s = STR[el.getAttribute("data-i18n")]; if(s) setBi(el, s);
+    });
+    var q = document.getElementById("q");
+    q.placeholder = pick(STR.search_ph).split("\n")[0];
     document.title = TITLES[lang];
     document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
     document.querySelectorAll(".langbar button").forEach(function(btn){
       btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === lang ? "true" : "false");
     });
     try{ localStorage.setItem("library-lang", lang); }catch(e){}
+    render();
   }
+
+  document.querySelectorAll(".langbar button").forEach(function(btn){
+    btn.addEventListener("click", function(){ applyLang(btn.getAttribute("data-lang")); });
+  });
+  document.querySelectorAll(".views button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.body.setAttribute("data-view", btn.getAttribute("data-view"));
+      document.querySelectorAll(".views button").forEach(function(b2){
+        b2.setAttribute("aria-pressed", b2 === btn ? "true" : "false");
+      });
+    });
+  });
+  document.getElementById("q").addEventListener("input", function(ev){
+    query = ev.target.value.trim(); render();
+  });
 
   var saved = "zh";
   try{ saved = localStorage.getItem("library-lang") || "zh"; }catch(e){}
   if(["en","bi","zh"].indexOf(saved) < 0) saved = "zh";
   applyLang(saved);
-
-  document.querySelectorAll(".langbar button").forEach(function(btn){
-    btn.addEventListener("click", function(){ applyLang(btn.getAttribute("data-lang")); });
-  });
 </script>
 </body>
 </html>
